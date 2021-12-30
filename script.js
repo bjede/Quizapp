@@ -17,34 +17,34 @@ let questions = [
     },
     {
         "question": "Wie ist eine Website strukturiert?",
-        "answer_1": "<body>;<head>;<html>",
-        "answer_2": "<head>;<html>;<body>",
-        "answer_3": "<html>;<head>;<body>",
-        "answer_4": "<body>;<head>;<html>",
+        "answer_1": "&lt;body&gt;;&lt;head&gt;;&lt;html&gt;",
+        "answer_2": "&lt;head&gt;;&lt;html&gt;;&lt;body>",
+        "answer_3": "&lt;html&gt;;&lt;head&gt;;&lt;body&gt;",
+        "answer_4": "&lt;body&gt;;&lt;head&gt;;&lt;html&gt;",
         "right_answer": 3
     },
     {
         "question": "Mit welchem Befehl gibt man die größte Überschrift an?",
-        "answer_1": "<h1>...</h1>",
-        "answer_2": "<ü3>...</ü3>",
-        "answer_3": "<ü1>...</ü1>",
-        "answer_4": "<ü1>...</ü1>",
+        "answer_1": "&lt;h1&gt;...&lt;/h1&gt;",
+        "answer_2": "&lt;ü3&gt;...&lt;/ü3&gt;",
+        "answer_3": "&lt;ü1&gt;...&lt;/ü1&gt;",
+        "answer_4": "&lt;ü1&gt;...&lt;/ü1&gt;",
         "right_answer": 1
     },
     {
         "question": "Wie fügt man ein Bild ein?",
-        "answer_1": "<picture src='...'>",
-        "answer_2": "<img href='...'>",
-        "answer_3": "<img src='...'>",
-        "answer_4": "<pic src='...'>",
+        "answer_1": "&lt;picture src='...'&gt;",
+        "answer_2": "&lt;img href='...'&gt;",
+        "answer_3": "&lt;img src='...'&gt;",
+        "answer_4": "&lt;pic src='...'&gt;",
         "right_answer": 3
     },
     {
         "question": "Wie fügt man ein Zitat ein?",
-        "answer_1": "<citation>...</citation>",
-        "answer_2": "<cite>...</cite>",
-        "answer_3": "<cita>...</cita>",
-        "answer_4": "<kursiv>...</kursiv>",
+        "answer_1": "&lt;citation&gt;...&lt;/citation&gt;",
+        "answer_2": "&lt;cite&gt;...&lt;/cite&gt;",
+        "answer_3": "&lt;cita&gt;...&lt;/cita&gt;",
+        "answer_4": "&lt;kursiv&gt;...&lt;/kursiv&gt;",
         "right_answer": 2
     },
     {
@@ -58,6 +58,9 @@ let questions = [
 ];
 
 let currentQuestion = 0;
+let rightQuestions = 0;
+let AUDIO_SUCCESS = new Audio('audio/success.mp3');
+let AUDIO_FAIL = new Audio('audio/wrong.mp3');
 
 function init() {
     document.getElementById('all-questions').innerHTML = questions.length;
@@ -65,26 +68,100 @@ function init() {
 }
 
 function showQuestion() {
+    if (gameIsOver()) {
+        showEndofGame();
+    } else {
+        updateProgressBar();
+        updateToNextQuestion();
+    }
+}
+
+function gameIsOver() {
+    return currentQuestion >= questions.length;
+}
+
+function answer(selection) {
+    let question = questions[currentQuestion];
+    let selectedQuestionNumber = selection.slice(-1);
+    let idOfRrightAnswer = `answer_${question['right_answer']}`;
+
+    if (rightAnswerSelected(selectedQuestionNumber, question)) {
+        document.getElementById(selection).parentNode.classList.add('bg-success');
+        AUDIO_SUCCESS.play();
+        rightQuestions++;
+    } else {
+        document.getElementById(selection).parentNode.classList.add('bg-danger');
+        document.getElementById(idOfRrightAnswer).parentNode.classList.add('bg-success');
+        AUDIO_FAIL.play();
+    }
+    document.getElementById('next-button').disabled = false;
+}
+
+function rightAnswerSelected(selectedQuestionNumber, question) {
+    return selectedQuestionNumber == question['right_answer']
+}
+
+function nextQuestion() {
+    currentQuestion++;
+    document.getElementById('question-number').innerHTML = currentQuestion + 1;
+    document.getElementById('next-button').disabled = true;
+    resetAnswerButton();
+    showQuestion();
+}
+
+function resetAnswerButton() {
+    let card = document.querySelectorAll('.card');
+    for (let i = 0; i < card.length; i++) {
+        console.log(card[i]);
+        if(card[i].matches('.bg-success, .bg-danger')){
+            card[i].classList.remove('bg-success');
+            card[i].classList.remove('bg-danger');
+        }   
+    }
+
+/*  document.getElementById('answer_1').parentNode.classList.remove('bg-success');
+    document.getElementById('answer_1').parentNode.classList.remove('bg-danger');
+    document.getElementById('answer_2').parentNode.classList.remove('bg-success');
+    document.getElementById('answer_2').parentNode.classList.remove('bg-danger');
+    document.getElementById('answer_3').parentNode.classList.remove('bg-success');
+    document.getElementById('answer_3').parentNode.classList.remove('bg-danger');
+    document.getElementById('answer_4').parentNode.classList.remove('bg-success');
+    document.getElementById('answer_4').parentNode.classList.remove('bg-danger'); */
+}
+
+function showEndofGame() {
+    document.getElementById('end-screen').style.display = 'block';
+    document.getElementById('question-body').style.display = 'none';
+    document.getElementById('amount-of-questions').innerHTML = questions.length;
+    document.getElementById('right-question').innerHTML = rightQuestions;
+    document.getElementById('header-image').src = 'img/trophy.png';
+    document.getElementById('header-image').classList.add('contain');
+}
+
+function updateProgressBar() {
+    let percent = (currentQuestion + 1) / questions.length;
+    percent = Math.round(percent * 100);
+    document.getElementById('percent').innerHTML = `${percent}%`;
+    document.getElementById('percent').style.width = `${percent}%`;
+}
+
+function updateToNextQuestion() {
     let question = questions[currentQuestion];
 
     document.getElementById('question-text').innerHTML = question['question'];
-    document.getElementById('answer-1').innerHTML = question['answer_1'];
-    document.getElementById('answer-2').innerHTML = question['answer_2'];
-    document.getElementById('answer-3').innerHTML = question['answer_3'];
-    document.getElementById('answer-4').innerHTML = question['answer_4'];
-
-/*     for (let i = 0; i < questions.length; i++) {
-        if (i == currentQuestion) {
-            let question = questions[currentQuestion];
-            document.getElementById('test').innerHTML +=
-                `${question['question']}<br>
-                 ${question['answer_1']}<br>
-                 ${question['answer_2']}<br>
-                 ${question['answer_3']}<br>
-                 ${question['answer_4']}<br>
-                `;
-        }
-    } */
-
+    document.getElementById('answer_1').innerHTML = `<span>A</span> <span>${question['answer_1']}</span>`;
+    document.getElementById('answer_2').innerHTML = `<span>B</span> <span>${question['answer_2']}</span>`;
+    document.getElementById('answer_3').innerHTML = `<span>C</span> <span>${question['answer_3']}</span>`;
+    document.getElementById('answer_4').innerHTML = `<span>D</span> <span>${question['answer_4']}</span>`;
 }
 
+function restartGame() {
+    currentQuestion = 0;
+    rightQuestions = 0;
+    document.getElementById('question-number').innerHTML = currentQuestion + 1;
+    document.getElementById('header-image').src = 'img/brainstorm-gf6dc40ff0_1280.jpg';
+    document.getElementById('header-image').classList.remove('contain');
+    document.getElementById('end-screen').style.display = 'none';
+    document.getElementById('question-body').style.display = 'block';
+    init();
+}

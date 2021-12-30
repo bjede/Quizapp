@@ -1,6 +1,9 @@
 body {
-    background-color: #007AFF !important;
+    background-image: url('img/bg.jpg') !important;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
+
 .container {
     height: 100vh;
     display: flex;
@@ -11,11 +14,132 @@ body {
 .question-footer {
     display: flex;
     justify-content: space-between;
-    border-top: 1px solid rgba(0, 0, 0, 0.048);
     align-items: center;
-    padding-top: 10px;
+    padding-top: 1rem;
 }
 
 .quiz-card {
-    width: 30rem;
+    width: 35rem;
+    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.164);
+}
+
+.quiz-card .card-img-top {
+    width: 100%;
+    height: 16rem;
+    object-fit: cover;
+}
+
+.answer-container {
+    margin-bottom: 1rem;
+}
+
+.quiz-answer-card:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.034);
+}
+
+.quiz-answer-card > div > span:nth-child(1) {
+    position: absolute;
+    left: 0.4rem;
+    top: 0.5rem;
+    padding: 0.3rem 0.7rem;
+    background-color: rgb(242, 242, 242);
+    border-radius: 0.2rem;
+}
+
+.quiz-answer-card > .card-body {
+    padding-left: 3.5rem;
+}
+
+.bg-danger .card-body > span:nth-child(2),
+.bg-success .card-body > span:nth-child(2) {
+    color: white;
+}
+
+.width-100 {
+    width: 100%;
+}
+
+.text-align {
+    text-align: center;
+}
+
+.card-img-top {
+    object-fit: cover;
+}
+
+.final-headline {
+    font-size: 38px;
+    margin-bottom: 1rem;
+}
+
+.button-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+.question-number-container {
+    display: block;
+    padding: 2px 20px;
+    background-color: rgb(245, 245, 245);
+    text-shadow: 1px 1px 3px white;
+    border-radius: 9999px;
+    color: #353535;
+    font-size: 0.9rem;
+    box-shadow: 1px 1px 1px rgb(219, 219, 219);
+}
+
+.color-black {
+    color: rgb(26, 26, 26);
+}
+
+.quiz-card .progress {
+    height: 1.4rem;
+    font-size: 0.9rem;
+    border-radius: initial;
+}
+
+.contain {
+    object-fit: contain !important;
+    background-color: #cfebea;
+}
+
+.answer-container .card-body {
+    padding: 0.8rem 0.8rem 0.8rem 3rem;
+    box-shadow: 1px 1px 1px rgb(212, 212, 212);
+}
+
+.card-title.mb-4 {
+    margin-bottom: 1.2rem !important;
+}
+
+.full-width {
+    margin: 0 -1rem;
+    background-color: rgb(165, 165, 165);
+}
+
+
+@media (max-width: 36em) {
+    .container {
+        padding: 0 !important;
+        align-items: flex-start;
+    }
+    #question-text{
+        font-size: 1.1rem;
+    }
+
+    .quiz-card .progress {
+        height: 1.1rem;
+        font-size: 0.8rem;
+    }
+
+    .answer-container .card-body {
+        padding: 0.6rem 0.8rem 0.6rem 3.2rem;
+    }
+
+    .quiz-answer-card > div > span:nth-child(1) {
+        top: 0.4rem;
+        padding: 0.2rem 0.7rem;
+    }
 }
